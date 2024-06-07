@@ -11,6 +11,15 @@ pub mod traits;
 #[cfg(test)]
 mod tests {
     use crate::matrix::types::Mat2;
+    use crate::traits::lerp::Lerp;
+
+    #[test]
+    fn test_lerp() {
+        let a = 5;
+        let b = 10;
+        let c = a.lerp(&b, 0.5);
+        println!("{:?}", (a, b, c));
+    }
 
     #[test]
     fn it_works() {

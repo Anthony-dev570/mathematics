@@ -4,6 +4,7 @@ use std::mem::size_of;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 use crate::endian::Endian;
+use crate::traits::lerp::Lerp;
 
 crate::number!(
     u8, u16, u32, u64, u128, usize,
@@ -15,6 +16,11 @@ crate::number!(
 macro_rules! number {
     ($($num:ty),*) => {
         $(
+            impl Lerp for $num {
+                fn lerp(&self, b: &Self, t: f32) -> Self {
+                    ((1_f64 - t as f64) * (*self as f64) + (t as f64) * *b as f64) as Self
+                }
+            }
             impl Number for $num {
                 const ZERO: Self = 0.0 as Self;
                 const ONE: Self = 1.0 as Self;
@@ -76,7 +82,7 @@ macro_rules! number {
     };
 }
 
-pub trait Number: Sized + Copy + Debug + Default + ToString +
+pub trait Number: Sized + Copy + Debug + Default + ToString + Lerp +
 Add<Output=Self> + Sub<Output=Self> + Mul<Output=Self> + Div<Output=Self> +
 AddAssign + SubAssign + MulAssign + DivAssign + Sum<Self> + PartialOrd {
     const SIZE: usize = size_of::<Self>();
