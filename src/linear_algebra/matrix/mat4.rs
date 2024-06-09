@@ -1,0 +1,22 @@
+use std::ops::Neg;
+use crate::linear_algebra::matrix::types::{Mat3, Mat4};
+use crate::shared::angle::Angle;
+use crate::shared::traits::number::Number;
+
+impl<N: Number> Mat4<N> {
+    crate::to_mat! {
+        N, 4 => 2, 3, 5, 6, 7, 8, 9
+    }
+
+    pub fn rotation_x(x: Angle<N>) -> Mat4<N> where N: Neg<Output=N> {
+        Mat3::rotation_x(x).to_mat4()
+    }
+
+    pub fn rotation_y(y: Angle<N>) -> Mat4<N> where N: Neg<Output=N> {
+        Mat3::rotation_y(y).to_mat4()
+    }
+
+    pub fn rotation_z(z: Angle<N>) -> Mat4<N> where N: Neg<Output=N> {
+        Mat3::rotation_z(z).to_mat4()
+    }
+}

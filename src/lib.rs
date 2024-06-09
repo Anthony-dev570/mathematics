@@ -1,17 +1,16 @@
 #![allow(warnings)]
 #![feature(generic_const_exprs)]
+#![feature(const_fn_floating_point_arithmetic)]
 
-pub mod number;
-pub mod endian;
-pub mod vector;
-pub mod matrix;
-pub mod angle;
-pub mod traits;
+pub mod shared;
+pub mod algebra;
+pub mod linear_algebra;
+pub mod chemistry;
 
 #[cfg(test)]
 mod tests {
-    use crate::matrix::types::Mat2;
-    use crate::traits::lerp::Lerp;
+    use crate::linear_algebra::matrix::Matrix;
+    use crate::shared::traits::lerp::Lerp;
 
     #[test]
     fn test_lerp() {
@@ -23,9 +22,8 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let m = Mat2::new([[3.25342343; 2]; 2]);
-        let m6 = m.to_mat3();
-        let m2 = m6.to_mat2().to_mat6();
-        println!("{}", m2);
+        let mut m = Matrix::new([[0.0; 2]; 3]);
+
+        println!("{}\nvs\n{}", m, m.transpose());
     }
 }
