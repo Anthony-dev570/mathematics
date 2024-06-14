@@ -19,4 +19,20 @@ impl<N: Number> Mat4<N> {
     pub fn rotation_z(z: Angle<N>) -> Mat4<N> where N: Neg<Output=N> {
         Mat3::rotation_z(z).to_mat4()
     }
+
+    pub fn orthographic(
+        left: N,
+        right: N,
+        top: N,
+        bottom: N,
+        near: N,
+        far: N,
+    ) -> Self where N: Neg<Output=N> {
+        Self([
+            [N::TWO / (right - left), N::ZERO, N::ZERO, N::ZERO],
+            [N::ZERO, N::TWO / (top - bottom), N::ZERO, N::ZERO],
+            [N::ZERO, N::ZERO, -N::TWO / (far - near), N::ZERO],
+            [-(right + left) / (right - left), -(top + bottom) / (top - bottom), -(far + near / far - near), N::ONE],
+        ])
+    }
 }

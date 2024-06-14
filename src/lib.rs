@@ -9,7 +9,10 @@ pub mod chemistry;
 
 #[cfg(test)]
 mod tests {
-    use crate::linear_algebra::matrix::Matrix;
+    use crate::linear_algebra::euler_angles::EulerAngles;
+    use crate::linear_algebra::euler_angles::principle_euler_angles::PrincipleEulerAngles;
+    use crate::linear_algebra::vector::types::Vector3;
+    use crate::shared::angle::Angle::Degrees;
     use crate::shared::traits::lerp::Lerp;
 
     #[test]
@@ -22,8 +25,15 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let mut m = Matrix::new([[0.0; 2]; 3]);
+        let v = Vector3::new([1_f32, 0_f32, 0_f32]);
+        let e = PrincipleEulerAngles {
+            roll: Degrees(90_f32),
+            pitch: Degrees(0_f32),
+            yaw: Degrees(0_f32),
+        }.to_quaternion();
+        println!("{:?}", e);
+        let v_prime = e * v;
 
-        println!("{}\nvs\n{}", m, m.transpose());
+        println!("{:?}", v_prime);
     }
 }

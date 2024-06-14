@@ -15,8 +15,8 @@ impl<N: Number> Mat3<N> {
         let (c, s) = r.cos_sin();
 
         Self([
-            [o, z,  z],
-            [z, c,  s],
+            [o, z, z],
+            [z, c, s],
             [z, -s, c]
         ])
     }
@@ -27,9 +27,9 @@ impl<N: Number> Mat3<N> {
         let (c, s) = r.cos_sin();
 
         Self([
-            [ c, z, -s],
-            [ z, o, z],
-            [ s, z, c]
+            [c, z, -s],
+            [z, o, z],
+            [s, z, c]
         ])
     }
 
@@ -39,9 +39,9 @@ impl<N: Number> Mat3<N> {
         let (c, s) = r.cos_sin();
 
         Self([
-            [ c, s, z],
+            [c, s, z],
             [-s, c, z],
-            [ z, z, o]
+            [z, z, o]
         ])
     }
 }

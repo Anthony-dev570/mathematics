@@ -13,7 +13,6 @@ pub trait EulerAngles<N: Number> {
     fn z(&self) -> &Angle<N>;
 
     fn to_quaternion(&self) -> Quaternion<N> {
-
         let half = N::ONE / N::TWO;
 
         let (roll, pitch, yaw) = (
@@ -32,6 +31,7 @@ pub trait EulerAngles<N: Number> {
             cr * cp * sy - sr * sp * cy
         ]);
         let w = cr * cp * cy + sr * sp * sy;
+
         Quaternion::new(QuaternionConstructor::Default {
             xyz,
             w,

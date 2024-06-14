@@ -11,6 +11,12 @@ constructor!(
                 xyz,
                 w,
             }
+        },
+        Pure(xyz: Vector3<N>) {
+            Quaternion {
+                xyz,
+                w: N::ZERO
+            }
         }
     }
 );

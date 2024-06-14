@@ -1,12 +1,38 @@
 use std::fmt::Display;
-use std::ops::{Index, IndexMut};
+use std::ops::{Div, Index, IndexMut, Neg};
 use crate::linear_algebra::vector::Vector;
 use crate::shared::traits::number::Number;
 use crate::shared::traits::lerp::Lerp;
 
+impl <const L: usize, N: Number> Div<N> for Vector<L, N> {
+    type Output = Self;
+
+    fn div(self, rhs: N) -> Self::Output {
+        let mut out = self.clone();
+        for i in 0..L {
+            out[i] /= rhs;
+        }
+        out
+    }
+}
+
 impl <const L: usize, N: Number> Display for Vector<L, N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", format!("<{}>", self.0.iter().map(|s| s.to_string()).collect::<Vec<String>>().join(", ")))
+    }
+}
+
+impl <const L: usize, N: Number + Neg<Output=N>> Neg for Vector<L, N> {
+    type Output = Self;
+
+    fn neg(self) -> Self::Output {
+        let mut out = self.clone();
+
+        for i in 0..L {
+            out[i] = -out[i];
+        }
+
+        out
     }
 }
 
