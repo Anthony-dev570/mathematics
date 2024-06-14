@@ -6,6 +6,7 @@ pub mod shared;
 pub mod algebra;
 pub mod linear_algebra;
 pub mod chemistry;
+pub mod geometry;
 
 #[cfg(test)]
 mod tests {

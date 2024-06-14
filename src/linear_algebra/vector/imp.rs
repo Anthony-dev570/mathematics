@@ -1,40 +1,9 @@
 use std::fmt::Display;
-use std::ops::{Div, Index, IndexMut, Neg};
+use std::ops::{Add, Sub};
+
 use crate::linear_algebra::vector::Vector;
-use crate::shared::traits::number::Number;
 use crate::shared::traits::lerp::Lerp;
-
-impl <const L: usize, N: Number> Div<N> for Vector<L, N> {
-    type Output = Self;
-
-    fn div(self, rhs: N) -> Self::Output {
-        let mut out = self.clone();
-        for i in 0..L {
-            out[i] /= rhs;
-        }
-        out
-    }
-}
-
-impl <const L: usize, N: Number> Display for Vector<L, N> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", format!("<{}>", self.0.iter().map(|s| s.to_string()).collect::<Vec<String>>().join(", ")))
-    }
-}
-
-impl <const L: usize, N: Number + Neg<Output=N>> Neg for Vector<L, N> {
-    type Output = Self;
-
-    fn neg(self) -> Self::Output {
-        let mut out = self.clone();
-
-        for i in 0..L {
-            out[i] = -out[i];
-        }
-
-        out
-    }
-}
+use crate::shared::traits::number::Number;
 
 impl <const L: usize, N: Number> Vector<L, N> {
     ///Create a new N dimensional 1xN matrix(vector) with provided values.
@@ -118,17 +87,51 @@ impl <const L: usize, N: Number> Vector<L, N> {
 
 }
 
-impl <const L: usize, N: Number> Index<usize> for Vector<L, N> {
-    type Output = N;
+impl <const L: usize, N: Number> Add<N> for Vector<L, N> {
+    type Output = Self;
 
-    fn index(&self, index: usize) -> &Self::Output {
-        &self.0[index]
+    fn add(self, rhs: N) -> Self::Output {
+        let mut out = self.clone();
+
+        for i in 0..L {
+            out[i] += rhs;
+        }
+
+        out
     }
 }
 
-impl <const L: usize, N: Number> IndexMut<usize> for Vector<L, N> {
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        &mut self.0[index]
+impl <const L: usize, N: Number> Add<Self> for Vector<L, N> {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        let mut out = self.clone();
+
+        for i in 0..L {
+            out[i] += rhs[i];
+        }
+
+        out
+    }
+}
+
+impl <const L: usize, N: Number> Sub<Self> for Vector<L, N> {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        let mut out = self.clone();
+
+        for i in 0..L {
+            out[i] -= rhs[i];
+        }
+
+        out
+    }
+}
+
+impl <const L: usize, N: Number> Display for Vector<L, N> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", format!("<{}>", self.0.iter().map(|s| s.to_string()).collect::<Vec<String>>().join(", ")))
     }
 }
 

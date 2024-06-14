@@ -1,42 +1,13 @@
-use std::ops::{Mul, Neg};
+use std::ops::{Div, Mul, Neg};
 
 use crate::linear_algebra::euler_angles::EulerAngles;
 use crate::linear_algebra::matrix::types::Mat3;
-use crate::linear_algebra::quaternion::{Quaternion, QuaternionConstructor};
+use crate::linear_algebra::quaternion::Quaternion;
 use crate::linear_algebra::vector::types::Vector3;
-use crate::linear_algebra::vector::Vector;
 use crate::shared::angle::Angle;
 use crate::shared::traits::number::Number;
 
-impl<N: Number + Neg<Output=N>> Mul<Vector3<N>> for Quaternion<N> {
-    type Output = Vector3<N>;
-
-    fn mul(self, rhs: Vector3<N>) -> Self::Output {
-        let q = Self::new(QuaternionConstructor::Pure {
-            xyz: rhs,
-        });
-        (self * q * self.conjugate()).xyz
-    }
-}
-
-impl<N: Number> Mul<Quaternion<N>> for Quaternion<N> {
-    type Output = Self;
-
-    fn mul(self, rhs: Quaternion<N>) -> Self::Output {
-        let q = self.wxyz();
-        let r = rhs.wxyz();
-        let t = [
-            r[0] * q[0] - r[1] * q[1] - r[2] * q[2] - r[3] * q[3],
-            r[0] * q[1] + r[1] * q[0] - r[2] * q[3] + r[3] * q[2],
-            r[0] * q[2] + r[1] * q[3] + r[2] * q[0] - r[3] * q[1],
-            r[0] * q[3] - r[1] * q[2] + r[2] * q[1] + r[3] * q[0]
-        ];
-        Self {
-            xyz: Vector::new([t[1], t[2], t[3]]),
-            w: t[0],
-        }
-    }
-}
+pub mod operations;
 
 impl<N: Number> Quaternion<N> {
     pub fn to_euler_angle<E: EulerAngles<N>>(self) -> E {
@@ -116,5 +87,15 @@ impl<N: Number> Quaternion<N> {
             [d, e, f],
             [g, h, i]
         ])
+    }
+
+    pub fn inverse(&self) -> Self where N: Neg<Output=N> {
+        let conjugate = self.conjugate();
+        conjugate / (*self * conjugate)
+    }
+
+    pub fn slerp(&self, b: &Self, t: N) -> Quaternion<N> where N: Neg<Output=N> {
+        let (one, two) = (*self, *b);
+        (two * one.inverse()) * t * one
     }
 }
