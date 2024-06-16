@@ -23,8 +23,8 @@ impl<N: Number> Mat4<N> {
     pub fn orthographic(
         left: N,
         right: N,
-        top: N,
         bottom: N,
+        top: N,
         near: N,
         far: N,
     ) -> Self where N: Neg<Output=N> {
