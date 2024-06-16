@@ -28,11 +28,22 @@ impl<N: Number> Mat4<N> {
         near: N,
         far: N,
     ) -> Self where N: Neg<Output=N> {
-        Self([
+        /*Self([
             [N::TWO / (right - left), N::ZERO, N::ZERO, N::ZERO],
             [N::ZERO, N::TWO / (top - bottom), N::ZERO, N::ZERO],
             [N::ZERO, N::ZERO, -N::TWO / (far - near), N::ZERO],
             [-(right + left) / (right - left), -(top + bottom) / (top - bottom), -(far + near / far - near), N::ONE],
-        ])
+        ])*/
+
+        let mut out = Self::default();
+
+        out[0][0] = N::TWO / (right - left);
+        out[0][3] = -(right + left) / (right - left);
+        out[1][1] = top / (top - bottom);
+        out[1][3] = -(top + bottom) / (top - bottom);
+        out[2][2] = -top / (far - near);
+        out[2][3] = -(far + near) / (far - near);
+
+        out
     }
 }
