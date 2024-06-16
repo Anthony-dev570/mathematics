@@ -39,11 +39,11 @@ impl<N: Number> Mat4<N> {
         let two = N::TWO;
 
         out[0][0] = two / (right - left);
-        out[3][0] = -(right + left) / (right - left);
+        out[0][3] = -(right + left) / (right - left);
         out[1][1] = two / (top - bottom);
-        out[3][1] = -(top + bottom) / (top - bottom);
+        out[1][3] = -(top + bottom) / (top - bottom);
         out[2][2] = -two / (far - near);
-        out[3][2] = -(far + near) / (far - near);
+        out[2][3] = -(far + near) / (far - near);
 
         out
     }
