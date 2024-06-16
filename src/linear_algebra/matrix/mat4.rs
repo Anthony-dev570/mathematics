@@ -38,11 +38,11 @@ impl<N: Number> Mat4<N> {
         let mut out = Self::identity();
 
         out[0][0] = N::TWO / (right - left);
-        out[0][3] = -(right + left) / (right - left);
+        out[3][0] = -(right + left) / (right - left);
         out[1][1] = top / (top - bottom);
-        out[1][3] = -(top + bottom) / (top - bottom);
+        out[3][1] = -(top + bottom) / (top - bottom);
         out[2][2] = -top / (far - near);
-        out[2][3] = -(far + near) / (far - near);
+        out[3][2] = -(far + near) / (far - near);
 
         out
     }
