@@ -7,14 +7,27 @@ pub mod algebra;
 pub mod linear_algebra;
 pub mod chemistry;
 pub mod geometry;
+pub mod color;
 
 #[cfg(test)]
 mod tests {
+    use crate::color::Color;
     use crate::linear_algebra::euler_angles::EulerAngles;
     use crate::linear_algebra::euler_angles::principle_euler_angles::PrincipleEulerAngles;
     use crate::linear_algebra::vector::types::Vector3;
     use crate::shared::angle::Angle::Degrees;
     use crate::shared::traits::lerp::Lerp;
+
+    #[test]
+    fn test_color() {
+        let color = Color::HSL {
+            hue: Degrees(50_f32),
+            saturation: 10_f32,
+            lightness: 10_f32,
+        };
+
+        println!("{:?}", color.to_rgb());
+    }
 
     #[test]
     fn test_lerp() {

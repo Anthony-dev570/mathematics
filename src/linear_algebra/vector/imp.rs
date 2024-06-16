@@ -7,7 +7,7 @@ use crate::shared::traits::number::Number;
 
 impl <const L: usize, N: Number> Vector<L, N> {
     ///Create a new N dimensional 1xN matrix(vector) with provided values.
-    pub fn new(values: [N; L]) -> Self {
+    pub const fn new(values: [N; L]) -> Self {
         Self(values)
     }
 

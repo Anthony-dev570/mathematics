@@ -1,7 +1,7 @@
 use std::fmt::{Debug, Display};
 use std::iter::Sum;
 use std::mem::size_of;
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, Sub, SubAssign};
 
 use crate::shared::endian::Endian;
 use crate::shared::traits::lerp::Lerp;
@@ -89,14 +89,18 @@ macro_rules! number {
                 fn from_f64(f: f64) -> Self {
                     f as Self
                 }
+
+                fn absolute(self) -> Self {
+                    (self as f64).abs() as Self
+                }
             }
         )*
     };
 }
 
-pub trait Number: Sized + Copy + Debug + Default + ToString + Lerp + Display +
+pub trait Number: Sized + Copy + Debug + Default + ToString + Lerp + Display + PartialEq +
 Add<Output=Self> + Sub<Output=Self> + Mul<Output=Self> + Div<Output=Self> +
-AddAssign + SubAssign + MulAssign + DivAssign + Sum<Self> + PartialOrd {
+AddAssign + SubAssign + MulAssign + DivAssign + Sum<Self> + PartialOrd + Rem<Output=Self> {
     ///The size of this number object in memory, in bytes.
     const SIZE: usize = size_of::<Self>();
 
@@ -179,4 +183,7 @@ AddAssign + SubAssign + MulAssign + DivAssign + Sum<Self> + PartialOrd {
 
     ///Converts a f64(double) into this number.
     fn from_f64(f: f64) -> Self;
+
+    ///Calculates the absolute value of this number.
+    fn absolute(self) -> Self;
 }

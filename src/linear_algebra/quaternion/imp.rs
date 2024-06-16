@@ -39,15 +39,15 @@ impl<N: Number> Quaternion<N> {
         }
     }
 
-    pub fn norm(&self) -> N {
+    pub fn magnitude(&self) -> N {
         (self.xyz[0].num_pow(N::TWO) + self.xyz[1].num_pow(N::TWO) + self.xyz[2].num_pow(N::TWO) + self.w.num_pow(N::TWO)).num_sqrt()
     }
 
-    pub fn unit_quaternion(&self) -> Self {
-        let norm = self.norm();
+    pub fn norm(&self) -> Self {
+        let magnitude = self.magnitude();
         Self {
-            xyz: self.xyz / norm,
-            w: self.w / norm,
+            xyz: self.xyz / magnitude,
+            w: self.w / magnitude,
         }
     }
 
