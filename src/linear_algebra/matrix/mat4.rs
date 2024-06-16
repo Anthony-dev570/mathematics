@@ -35,7 +35,7 @@ impl<N: Number> Mat4<N> {
             [-(right + left) / (right - left), -(top + bottom) / (top - bottom), -(far + near / far - near), N::ONE],
         ])*/
 
-        let mut out = Self::default();
+        let mut out = Self::identity();
 
         out[0][0] = N::TWO / (right - left);
         out[0][3] = -(right + left) / (right - left);
