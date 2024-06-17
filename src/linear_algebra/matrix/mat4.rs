@@ -52,4 +52,14 @@ impl<N: Number> Mat4<N> {
     pub fn scale(scale: Vector3<N>) -> Self {
         Mat3::scale(scale).to_mat4()
     }
+
+    pub fn translation(translation: Vector3<N>) -> Self {
+        let (z, o) = (N::ZERO, N::ONE);
+        Self([
+            [o, z, z, z],
+            [z, o, z, z],
+            [z, z, o, z],
+            [translation[0], translation[1], translation[2], o]
+        ])
+    }
 }
