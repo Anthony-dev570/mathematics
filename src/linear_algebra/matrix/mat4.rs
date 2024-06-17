@@ -1,5 +1,6 @@
 use std::ops::Neg;
 use crate::linear_algebra::matrix::types::{Mat3, Mat4};
+use crate::linear_algebra::vector::types::Vector3;
 use crate::shared::angle::Angle;
 use crate::shared::traits::number::Number;
 
@@ -46,5 +47,9 @@ impl<N: Number> Mat4<N> {
         out[3][2] = -(far + near) / (far - near);
 
         out
+    }
+
+    pub fn scale(scale: Vector3<N>) -> Self {
+        Mat3::scale(scale).to_mat4()
     }
 }

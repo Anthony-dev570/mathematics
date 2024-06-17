@@ -1,12 +1,21 @@
 use std::ops::Neg;
 use crate::shared::angle::Angle;
 use crate::linear_algebra::matrix::types::Mat3;
+use crate::linear_algebra::vector::types::Vector3;
 
 use crate::shared::traits::number::Number;
 
 impl<N: Number> Mat3<N> {
     crate::to_mat! {
         N, 3 => 2, 4, 5, 6, 7, 8, 9
+    }
+
+    pub fn scale(scale: Vector3<N>) -> Self {
+        Self([
+            [scale[0], N::ZERO, N::ZERO],
+            [N::ZERO, scale[1], N::ZERO],
+            [N::ZERO, N::ZERO, scale[2]]
+        ])
     }
 
     pub fn rotation_x(theta: Angle<N>) -> Self where N: Neg<Output=N> {
