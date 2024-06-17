@@ -12,11 +12,24 @@ pub mod color;
 #[cfg(test)]
 mod tests {
     use crate::color::Color;
+    use crate::geometry::shape::Shape;
+    use crate::geometry::triangle::triangle2d::Triangle2D;
     use crate::linear_algebra::euler_angles::EulerAngles;
     use crate::linear_algebra::euler_angles::principle_euler_angles::PrincipleEulerAngles;
-    use crate::linear_algebra::vector::types::Vector3;
+    use crate::linear_algebra::vector::types::{Vector2F32, Vector3};
     use crate::shared::angle::Angle::Degrees;
     use crate::shared::traits::lerp::Lerp;
+
+    #[test]
+    fn test_geometry() {
+        let triangle_2d = Triangle2D::FromVertices {
+            a: Vector2F32::new([0.0; 2]),
+            b: Vector2F32::new([1.0, 0.0]),
+            c: Vector2F32::new([0.0, 1.0]),
+        };
+        let a = triangle_2d.area();
+        println!("{}", a);
+    }
 
     #[test]
     fn test_color() {
