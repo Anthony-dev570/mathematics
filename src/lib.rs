@@ -11,8 +11,8 @@ pub mod color;
 
 #[cfg(test)]
 mod tests {
-    use image::{ColorType, GenericImage, Rgb, RgbImage};
-    use image::ColorType::Rgba8;
+    use image::{GenericImage, Rgb, RgbImage};
+
     use crate::color::Color;
     use crate::geometry::curve::Curve;
     use crate::geometry::shape::Shape;
