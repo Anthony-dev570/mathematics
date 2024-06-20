@@ -6,6 +6,9 @@ pub mod imp;
 pub mod types;
 pub mod operations;
 
+pub mod vec2;
+pub mod vec3;
+
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 #[repr(C)]
 ///A vector is an N-Dimensional structure of scalar(numbers), representing a 1xN column matrix.
