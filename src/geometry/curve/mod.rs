@@ -2,6 +2,8 @@ use crate::linear_algebra::vector::types::Vector2;
 use crate::shared::traits::lerp::Lerp;
 use crate::shared::traits::number::Number;
 
+///Represents a Bézier curve.
+///See: <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Specific_cases">Bézier curve</a>
 #[derive(Debug, Clone)]
 pub enum Curve<N: Number> {
     Linear {
