@@ -93,6 +93,24 @@ macro_rules! number {
                 fn absolute(self) -> Self {
                     (self as f64).abs() as Self
                 }
+
+                fn clamp(self, min: Self, max: Self) -> Self {
+                    if self < min {
+                        return min;
+                    }
+                    if self > max {
+                        return max;
+                    }
+                    self
+                }
+
+                fn to_i32(self) -> i32 {
+                    self as i32
+                }
+
+                fn to_usize(self) -> usize {
+                    self as usize
+                }
             }
         )*
     };
@@ -186,4 +204,10 @@ AddAssign + SubAssign + MulAssign + DivAssign + Sum<Self> + PartialOrd + Rem<Out
 
     ///Calculates the absolute value of this number.
     fn absolute(self) -> Self;
+
+    ///Clamps this number between min and max.
+    fn clamp(self, min: Self, max: Self) -> Self;
+
+    fn to_i32(self) -> i32;
+    fn to_usize(self) -> usize;
 }
