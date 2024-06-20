@@ -1,5 +1,4 @@
 use crate::linear_algebra::vector::types::Vector2;
-use crate::linear_algebra::vector::Vector;
 use crate::shared::traits::lerp::Lerp;
 use crate::shared::traits::number::Number;
 

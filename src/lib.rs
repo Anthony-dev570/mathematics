@@ -2,12 +2,22 @@
 #![feature(generic_const_exprs)]
 #![feature(const_fn_floating_point_arithmetic)]
 
+use crate::geometry::curve::Curve;
+use crate::linear_algebra::vector::types::Vector2F32;
+
 pub mod shared;
 pub mod algebra;
 pub mod linear_algebra;
 pub mod chemistry;
 pub mod geometry;
 pub mod color;
+
+pub fn do_test() {
+    Curve::Linear {
+        p0: Vector2F32::default(),
+        p1: Vector2F32::default(),
+    };
+}
 
 #[cfg(test)]
 mod tests {
