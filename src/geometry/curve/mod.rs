@@ -43,7 +43,6 @@ impl<N: Number> Curve<N> {
         } else if t >= N::ONE {
             return *self.last();
         }
-        //let t = t.clamp(N::ZERO, N::ONE);
         let inv_t = N::ONE - t;
         match self {
             Curve::Linear { p0, p1 } => {
@@ -73,8 +72,14 @@ impl<N: Number> Curve<N> {
                 let (p2_x, p2_y) = p2.xy();
                 let (p3_x, p3_y) = p3.xy();
 
-                let pf_x = N::ZERO;
-                let pf_y = N::ZERO;
+                let inv_t2 = inv_t * inv_t;
+                let inv_t3 = inv_t2 * inv_t;
+                let three = N::from_f64(3.0);
+
+                let pf_x =
+                    ((N::ONE - t) * (N::ONE - t) * (N::ONE - t)) * p0_x + (three * ((N::ONE - t) * ((N::ONE - t)))) * (t * p1_x) + three * ((N::ONE - t) * (t * t)) * p2_x + (t * t * t) * p3_x;
+
+                let pf_y = ((N::ONE - t) * (N::ONE - t) * (N::ONE - t)) * p0_y + (three * ((N::ONE - t) * ((N::ONE - t)))) * (t * p1_y) + three * ((N::ONE - t) * (t * t)) * p2_y + (t * t * t) * p3_y;
 
                 Vector2::new([pf_x, pf_y])
             }

@@ -70,26 +70,26 @@ mod tests {
     #[test]
     fn test_curves() {
         let p0 = Vector2F32::new([0_f32; 2]);
-        let p1 = Vector2F32::new([10_f32, 20_f32]);
-        let p2 = Vector2F32::new([20_f32, 0_f32]);
+        let p1 = Vector2F32::new([0_f32, 99_f32]);
+        let p2 = Vector2F32::new([99_f32, 0_f32]);
+        let p3 = Vector2F32::new([99_f32, 99_f32]);
 
-        let curve = Curve::Quadratic {
+        let curve = Curve::Cubic {
             p0,
             p1,
-            p2
+            p2,
+            p3
         };
 
-        let points = curve.points(0.1);
+        let points = curve.points(0.005);
 
-        let mut img = RgbImage::new(21, 20);
+        let mut img = RgbImage::new(100, 100);
 
         for point in points {
             let px = point.x() as u32;
             let py = point.y() as u32;
-            println!("{:?}", (px, py));
-            if px < 21 && py < 20 {
-                img.put_pixel(point.x() as u32, point.y() as u32, Rgb([255; 3]));
-            }
+
+            img.put_pixel(point.x() as u32, point.y() as u32, Rgb([255; 3]));
         }
 
         img.save("graph.png").unwrap();
