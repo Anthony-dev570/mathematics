@@ -6,6 +6,7 @@ use crate::shared::traits::number::Number;
 ///See: <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Specific_cases">Bézier curve</a>
 #[derive(Debug, Clone)]
 pub enum Curve<N: Number> {
+    ///Linear curve. This is a straight line.
     Linear {
         p0: Vector2<N>,
         p1: Vector2<N>,
