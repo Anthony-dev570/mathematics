@@ -78,20 +78,75 @@ mod tests {
     }
 
     #[test]
+    fn test_inverse_curve() {
+        let p0 = Vector2F32::new([0_f32; 2]);
+        let p1 = Vector2F32::new([0_f32, 100_f32]);
+        let p2 = Vector2F32::new([100_f32, 0.0]);
+        let p3 = Vector2F32::new([100_f32; 2]);
+
+        let curve = Curve::Cubic {
+            p0,
+            p1,
+            p2,
+            p3,
+        };
+
+        let p = curve.interpolate(0.5);
+
+        let p0x = p0.x();
+        let p1x = p1.x();
+        let p2x = p2.x();
+        let p3x = p3.x();
+        let px = p.x();
+
+        let a = p3x - 3_f32 * p2x + 3_f32 * p1x - p0x;
+        let b = 3_f32 * p2x - 6_f32 * p1x + 3_f32 * p0x;
+        let c = 3_f32 * p1x - 3_f32 * p0x;
+        let d = p0x - px;
+
+
+        let p = -b / (3_f32 * a);
+        let q = (p * p * p) + (b * c - 3_f32 * a * d) / (6_f32 * (a * a));
+        let r = c / (3_f32 * a);
+
+        println!("{:?}", (a, b, c, d));
+
+        println!("{:?}", (p, q, r));
+
+        //q + [q2 + (r-p2)3]1/2
+
+        let q2 = q * q;
+        let r_p2_3 = (r - p * p) * (r - p * p) * (r - p * p);
+
+        println!("{:?}", r_p2_3);
+
+        let inner = (
+            q2 + r_p2_3
+        ).powf(0.5);
+
+        println!("inner: {inner}");
+
+        let a = (q + inner).powf(0.33);
+        let b = (q - inner).powf(0.33) + p;
+
+        println!("{:?}", (a, b));
+    }
+
+    #[test]
     fn test_curves() {
         let p0 = Vector2F32::new([0_f32; 2]);
-        let p1 = Vector2F32::new([0_f32, 99_f32]);
-        let p2 = Vector2F32::new([99_f32, 0_f32]);
+        let p1 = Vector2F32::new([0_f32, 50_f32]);
+        let p2 = Vector2F32::new([99_f32, 50.0]);
         let p3 = Vector2F32::new([99_f32, 99_f32]);
 
         let curve = Curve::Cubic {
             p0,
             p1,
             p2,
-            p3
+            p3,
         };
 
-        let points = curve.points(0.005);
+        let points = curve.points(0.05);
 
         let mut img = RgbImage::new(100, 100);
 
@@ -101,6 +156,9 @@ mod tests {
 
             img.put_pixel(point.x() as u32, point.y() as u32, Rgb([255; 3]));
         }
+
+        img.put_pixel(p1.x() as u32, p1.y() as u32, Rgb([255, 0, 0]));
+        img.put_pixel(p2.x() as u32, p2.y() as u32, Rgb([255, 0, 0]));
 
         img.save("graph.png").unwrap();
     }

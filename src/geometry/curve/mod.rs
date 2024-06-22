@@ -39,6 +39,22 @@ impl<N: Number> Curve<N> {
         output.push(*self.last());
         output
     }
+
+    pub fn points_precision(&self, precision: N) -> Vec<(Vector2<N>, N)> {
+        let precision = precision.clamp(N::ZERO, N::ONE);
+
+        let mut output = vec![];
+
+        let mut sum = N::ZERO;
+
+        while sum <= N::from_f64(0.99) {
+            output.push((self.interpolate(sum), sum));
+            sum += precision;
+        }
+        output.push((*self.last(), N::ONE));
+        output
+    }
+
     pub fn interpolate(&self, t: N) -> Vector2<N> {
         if t <= N::ZERO {
             return *self.first();
