@@ -35,7 +35,7 @@ impl<N: Number> Mat4<N> {
         eye: Vector3<N>,
         up: Vector3<N>,
     ) -> Mat4<N> where
-        N: Neg,
+        N: Neg<Output=N>,
     {
         let fwd = (target - eye).normalize();
         let side = fwd.cross(&up).normalize();
@@ -49,7 +49,7 @@ impl<N: Number> Mat4<N> {
             [sx, ux, -fx, N::ZERO],
             [sy, uy, -fy, N::ZERO],
             [sz, uz, -fz, N::ZERO],
-            [-side.dot(&eye), -up.dot(&eye), -fwd.cross(&eye), N::ZERO]
+            [-side.dot(&eye), -up.dot(&eye), -fwd.dot(&eye), N::ZERO]
         ])
     }
 
@@ -59,14 +59,35 @@ impl<N: Number> Mat4<N> {
         near: N,
         far: N,
     ) -> Self where
-        N: Neg,
+        N: Neg<Output=N>,
     {
         let fov = (fov.to_radians().take() / N::TWO).tangent();
+
         Self([
-            [N::ONE / (aspect_ratio * fov), N::ZERO, N::ZERO, N::ZERO],
-            [N::ZERO, N::ONE / fov, N::ZERO, N::ZERO],
-            [N::ZERO, N::ZERO, -(far + near) / (far - near), -N::ONE],
-            [N::ZERO, N::ZERO, -(N::TWO * far * near) / (far - near), N::ZERO]
+            [
+                N::ONE / (aspect_ratio * fov),
+                N::ZERO,
+                N::ZERO,
+                N::ZERO
+            ],
+            [
+                N::ZERO,
+                N::ONE / fov,
+                N::ZERO,
+                N::ZERO
+            ],
+            [
+                N::ZERO,
+                N::ZERO,
+                -(far + near) / (far - near),
+                -N::ONE
+            ],
+            [
+                N::ZERO,
+                N::ZERO,
+                -(N::TWO * far * near) / (far - near),
+                N::ZERO
+            ]
         ])
     }
 
