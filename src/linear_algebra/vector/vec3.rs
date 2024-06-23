@@ -33,4 +33,15 @@ impl<N: Number> Vector3<N> {
     pub fn xyz(&self) -> (N, N, N) {
         (self.x(), self.y(), self.z())
     }
+
+    pub fn cross(&self, b: &Self) -> Self {
+        let (ax, ay, az) = self.xyz();
+        let (bx, by, bz) = b.xyz();
+
+        Self([
+            ay * bz - az * by,
+            az * bx - ax * bz,
+            ax * by - ay * bx
+        ])
+    }
 }

@@ -30,6 +30,29 @@ impl<N: Number> Mat4<N> {
         Mat3::rotation_z(z).to_mat4()
     }
 
+    pub fn look_at(
+        target: Vector3<N>,
+        eye: Vector3<N>,
+        up: Vector3<N>,
+    ) -> Mat4<N> where
+        N: Neg,
+    {
+        let fwd = (target - eye).normalize();
+        let side = fwd.cross(&up).normalize();
+        let up = side.cross(&fwd).normalize();
+
+        let (sx, sy, sz) = side.xyz();
+        let (ux, uy, uz) = up.xyz();
+        let (fx, fy, fz) = fwd.xyz();
+
+        Self([
+            [sx, ux, -fx, N::ZERO],
+            [sy, uy, -fy, N::ZERO],
+            [sz, uz, -fz, N::ZERO],
+            [-side.dot(&eye), -up.dot(&eye), -fwd.cross(&eye), N::ZERO]
+        ])
+    }
+
     pub fn perspective(
         aspect_ratio: N,
         fov: Angle<N>,
