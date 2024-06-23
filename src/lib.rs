@@ -1,3 +1,4 @@
+#![feature(const_trait_impl)]
 #![allow(warnings)]
 #![feature(generic_const_exprs)]
 #![feature(const_fn_floating_point_arithmetic)]
@@ -29,9 +30,40 @@ mod tests {
     use crate::geometry::triangle::triangle2d::Triangle2D;
     use crate::linear_algebra::euler_angles::EulerAngles;
     use crate::linear_algebra::euler_angles::principle_euler_angles::PrincipleEulerAngles;
-    use crate::linear_algebra::vector::types::{Vector2F32, Vector3};
+    use crate::linear_algebra::matrix::types::Mat4F32;
+    use crate::linear_algebra::vec3;
+    use crate::linear_algebra::vector::types::{Vector2F32, Vector3, Vector3F32};
     use crate::shared::angle::Angle::Degrees;
     use crate::shared::traits::lerp::Lerp;
+
+    #[test]
+    fn test_vec_funcs() {
+        let a = vec3(1_f32, 2_f32, 3_f32);
+        let b = vec3(4_f32, 5_f32, 6_f32);
+
+        let dot = a.dot(&b);
+        let c = a.cross(&b);
+
+        println!("{} {}", dot, c);
+    }
+
+    #[test]
+    fn test_matrix() {
+        let a = Mat4F32::look_at(
+            Vector3F32::BACKWARD * 3_f32,
+            Vector3F32::ZERO,
+            Vector3F32::UP,
+        );
+
+        let b = nalgebra_glm::look_at(
+            &nalgebra_glm::Vec3::new(0_f32, 0_f32, -3.0),
+            &nalgebra_glm::Vec3::new(0_f32, 0_f32, 0.0),
+            &nalgebra_glm::Vec3::new(0_f32, 1_f32, 0_f32),
+        );
+
+        println!("{}", a);
+        println!("{}", b);
+    }
 
     #[test]
     fn test_geometry() {

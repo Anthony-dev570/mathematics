@@ -6,6 +6,9 @@ use crate::shared::traits::lerp::Lerp;
 use crate::shared::traits::number::Number;
 
 impl <const L: usize, N: Number> Vector<L, N> {
+    pub const ZERO: Self = Self([N::ZERO; L]);
+    pub const ONE: Self = Self([N::ONE; L]);
+
     ///Create a new N dimensional 1xN matrix(vector) with provided values.
     pub const fn new(values: [N; L]) -> Self {
         Self(values)

@@ -11,6 +11,7 @@ pub mod mat6;
 pub mod mat7;
 pub mod mat8;
 pub mod mat9;
+pub mod row;
 
 #[derive(Debug, Clone, Copy)]
-pub struct Matrix<const C: usize, const R: usize, N: Number>([[N; C]; R]);
+pub struct Matrix<const C: usize, const R: usize, N: Number>(pub [[N; C]; R]);

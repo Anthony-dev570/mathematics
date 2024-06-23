@@ -21,6 +21,7 @@ macro_rules! number {
                     ((1_f64 - t as f64) * (*self as f64) + (t as f64) * *b as f64) as Self
                 }
             }
+
             impl Number for $num {
                 const ZERO: Self = 0.0 as Self;
                 const ONE: Self = 1.0 as Self;

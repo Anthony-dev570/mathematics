@@ -31,8 +31,8 @@ impl<N: Number> Mat4<N> {
     }
 
     pub fn look_at(
-        target: Vector3<N>,
         eye: Vector3<N>,
+        target: Vector3<N>,
         up: Vector3<N>,
     ) -> Mat4<N> where
         N: Neg<Output=N>,
@@ -45,12 +45,21 @@ impl<N: Number> Mat4<N> {
         let (ux, uy, uz) = up.xyz();
         let (fx, fy, fz) = fwd.xyz();
 
+        println!("{}", fwd.dot(&eye));
+
         Self([
-            [sx, ux, -fx, N::ZERO],
-            [sy, uy, -fy, N::ZERO],
-            [sz, uz, -fz, N::ZERO],
-            [-side.dot(&eye), -up.dot(&eye), -fwd.dot(&eye), N::ZERO]
+            [sx, sy, sz, -side.dot(&eye)],
+            [ux, uy, uz, -up.dot(&eye)],
+            [-fx, -fy, -fz, -fwd.dot(&eye)],
+            [N::ZERO, N::ZERO, N::ZERO, N::ONE]
         ])
+
+        /*Self([
+            [sx, ux, -fx, -side.dot(&eye)],
+            [sy, uy, -fy, -up.dot(&eye)],
+            [sz, uz, -fz, -fwd.dot(&eye)],
+            [N::ZERO, N::ZERO, N::ONE, N::ZERO]
+        ])*/
     }
 
     pub fn perspective(

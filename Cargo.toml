@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 paste = "*"
 image = "0.24.0"
+nalgebra-glm = "*"

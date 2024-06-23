@@ -1,7 +1,18 @@
+use crate::linear_algebra::scalar::Scalar;
 use crate::linear_algebra::vector::types::{Vector2, Vector3};
 use crate::shared::traits::number::Number;
 
+impl<N: Scalar> Vector3<N> {
+    pub const DOWN: Self = Self([N::ZERO, N::NEG_ONE, N::ZERO]);
+    pub const BACKWARD: Self = Self([N::ZERO, N::ZERO, N::NEG_ONE]);
+    pub const LEFT: Self = Self([N::NEG_ONE, N::ZERO, N::ZERO]);
+}
+
 impl<N: Number> Vector3<N> {
+    pub const UP: Self = Self([N::ZERO, N::ONE, N::ZERO]);
+    pub const FORWARD: Self = Self([N::ZERO, N::ZERO, N::ONE]);
+    pub const RIGHT: Self = Self([N::ONE, N::ZERO, N::ZERO]);
+
     pub fn vec2(self) -> Vector2<N> {
         Vector2::new([self.0[0], self.0[1]])
     }
