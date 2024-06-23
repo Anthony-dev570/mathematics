@@ -9,16 +9,42 @@ impl<N: Number> Mat4<N> {
         N, 4 => 2, 3, 5, 6, 7, 8, 9
     }
 
-    pub fn rotation_x(x: Angle<N>) -> Mat4<N> where N: Neg<Output=N> {
+    pub fn rotation_x(x: Angle<N>) -> Mat4<N>
+    where
+        N: Neg<Output=N>,
+    {
         Mat3::rotation_x(x).to_mat4()
     }
 
-    pub fn rotation_y(y: Angle<N>) -> Mat4<N> where N: Neg<Output=N> {
+    pub fn rotation_y(y: Angle<N>) -> Mat4<N>
+    where
+        N: Neg<Output=N>,
+    {
         Mat3::rotation_y(y).to_mat4()
     }
 
-    pub fn rotation_z(z: Angle<N>) -> Mat4<N> where N: Neg<Output=N> {
+    pub fn rotation_z(z: Angle<N>) -> Mat4<N>
+    where
+        N: Neg<Output=N>,
+    {
         Mat3::rotation_z(z).to_mat4()
+    }
+
+    pub fn perspective(
+        aspect_ratio: N,
+        fov: Angle<N>,
+        near: N,
+        far: N,
+    ) -> Self where
+        N: Neg,
+    {
+        let fov = (fov.to_radians().take() / N::TWO).tangent();
+        Self([
+            [N::ONE / (aspect_ratio * fov), N::ZERO, N::ZERO, N::ZERO],
+            [N::ZERO, N::ONE / fov, N::ZERO, N::ZERO],
+            [N::ZERO, N::ZERO, -(far + near) / (far - near), -N::ONE],
+            [N::ZERO, N::ZERO, -(N::TWO * far * near) / (far - near), N::ZERO]
+        ])
     }
 
     pub fn orthographic(
@@ -28,14 +54,9 @@ impl<N: Number> Mat4<N> {
         top: N,
         near: N,
         far: N,
-    ) -> Self where N: Neg<Output=N> {
-        /*Self([
-            [N::TWO / (right - left), N::ZERO, N::ZERO, N::ZERO],
-            [N::ZERO, N::TWO / (top - bottom), N::ZERO, N::ZERO],
-            [N::ZERO, N::ZERO, -N::TWO / (far - near), N::ZERO],
-            [-(right + left) / (right - left), -(top + bottom) / (top - bottom), -(far + near / far - near), N::ONE],
-        ])*/
-
+    ) -> Self where
+        N: Neg<Output=N>,
+    {
         let mut out = Self::identity();
         let two = N::TWO;
 
