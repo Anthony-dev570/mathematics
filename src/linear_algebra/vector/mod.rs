@@ -8,6 +8,7 @@ pub mod operations;
 
 pub mod vec2;
 pub mod vec3;
+pub mod vec4;
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 #[repr(C)]

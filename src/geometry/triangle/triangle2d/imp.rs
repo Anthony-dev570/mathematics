@@ -1,8 +1,9 @@
 use crate::geometry::shape::Shape;
 use crate::geometry::triangle::triangle2d::Triangle2D;
+use crate::linear_algebra::vector::Vector;
 use crate::shared::traits::number::Number;
 
-impl <N: Number> Shape<N> for Triangle2D<N> {
+impl <N: Number> Shape<2, N> for Triangle2D<N> {
     fn area(&self) -> N {
         match self {
             Triangle2D::FromVertices { a, b, c } => {
@@ -12,5 +13,9 @@ impl <N: Number> Shape<N> for Triangle2D<N> {
                 (N::ONE / N::TWO) * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)).absolute()
             }
         }
+    }
+
+    fn contains_point(&self, point: &Vector<2, N>) -> bool {
+        todo!()
     }
 }

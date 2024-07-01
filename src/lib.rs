@@ -22,12 +22,13 @@ pub fn do_test() {
 
 #[cfg(test)]
 mod tests {
-    use image::{GenericImage, Rgb, RgbImage};
+    use image::{ColorType, GenericImage, Rgb, Rgba, RgbImage};
 
     use crate::color::Color;
     use crate::geometry::curve::Curve;
     use crate::geometry::shape::Shape;
     use crate::geometry::triangle::triangle2d::Triangle2D;
+    use crate::geometry::uv_sphere::UVSphere;
     use crate::linear_algebra::euler_angles::EulerAngles;
     use crate::linear_algebra::euler_angles::principle_euler_angles::PrincipleEulerAngles;
     use crate::linear_algebra::matrix::types::Mat4F32;
@@ -45,6 +46,24 @@ mod tests {
         let c = a.cross(&b);
 
         println!("{} {}", dot, c);
+    }
+
+    #[test]
+    fn test_uv_sphere() {
+        let sphere = UVSphere {
+            radius: 5.0,
+            latitudes: 10.0,
+            longitudes: 10.0,
+        };
+
+        let mut rgb = image::DynamicImage::new(100, 100, ColorType::Rgb8);
+
+        for v in sphere.to_geometry().vertices {
+            rgb.put_pixel(50 + v.x() as u32, 50 + v.y() as u32, Rgba([255; 4]))
+        }
+
+        rgb.save("output.png").unwrap();
+        //rgb.put_pixel(50 + )
     }
 
     #[test]
