@@ -12,6 +12,7 @@ pub mod linear_algebra;
 pub mod chemistry;
 pub mod geometry;
 pub mod color;
+pub mod physics;
 
 pub fn do_test() {
     Curve::Linear {
@@ -22,6 +23,10 @@ pub fn do_test() {
 
 #[cfg(test)]
 mod tests {
+    use std::f32::consts::PI;
+    use std::process::Command;
+    use std::thread::spawn;
+    use std::time::Instant;
     use image::{ColorType, GenericImage, Rgb, Rgba, RgbImage};
 
     use crate::color::Color;
@@ -34,6 +39,8 @@ mod tests {
     use crate::linear_algebra::matrix::types::Mat4F32;
     use crate::linear_algebra::vec3;
     use crate::linear_algebra::vector::types::{Vector2F32, Vector3, Vector3F32};
+    use crate::physics::rigidbody::Rigidbody;
+    use crate::physics::world::World;
     use crate::shared::angle::Angle::Degrees;
     use crate::shared::traits::lerp::Lerp;
 
@@ -212,5 +219,105 @@ mod tests {
         img.put_pixel(p2.x() as u32, p2.y() as u32, Rgb([255, 0, 0]));
 
         img.save("graph.png").unwrap();
+    }
+
+    #[test]
+    fn test_world() {
+        let mut world = World::default();
+        let handle = world.create_rigidbody();
+
+        let mut now = Instant::now();
+
+        while now.elapsed().as_secs() < 5 {
+            world.update();
+        }
+
+        println!("{:?}", handle.rigidbody);
+    }
+
+    #[test]
+    fn test_ffmpeg() {
+        let dims = [512; 2];
+        let mut pos = [0; 2];
+
+        let mut magnitude = 30;
+
+        std::fs::create_dir("tmp");
+
+        //let mut img = image::DynamicImage::new(dims[0], dims[1], ColorType::Rgb8).to_rgb8();
+
+        let mut threads = vec![];
+
+        for j in 0..10 {
+            let handle = spawn(move || {
+                let mut angle = 0_f32;
+
+                let mut img = image::DynamicImage::new(dims[0], dims[1], ColorType::Rgb8).to_rgb8();
+
+                magnitude = (angle * 256_f32) as i32;
+
+                let mut last_pos = pos;
+
+                for i in (j * 100)..((j + 1) * 100) {
+                    angle = i as f32 / 1000_f32;
+                    magnitude = (angle * 256_f32) as i32;
+                    pos = [((angle * 360_f32).to_radians().cos() * magnitude as f32) as i32,
+                        ((angle * 360_f32).to_radians().sin() * magnitude as f32) as i32];
+                    img.put_pixel(
+                        (256 + pos[0]) as u32,
+                        (256 + pos[1]) as u32,
+                        Rgb([(angle * 255_f32) as u8, 255, 0]),
+                    );
+                    img.save(format!("tmp/tmp_{i}.png")).unwrap();
+                    last_pos = pos;
+                }
+            });
+            threads.push(handle);
+        }
+
+        while !threads.is_empty() {
+            let t = threads.remove(0);
+            t.join();
+        }
+
+        /*for i in 0..1000 {
+            angle = i as f32 / 1000_f32;
+            magnitude = (angle * 256_f32) as i32;
+            pos = [((angle * 360_f32).to_radians().cos() * magnitude as f32) as i32,
+                ((angle * 360_f32).to_radians().sin() * magnitude as f32) as i32];
+
+            img.put_pixel(
+                (256 + pos[0]) as u32,
+                (256 + pos[1]) as u32,
+                Rgb([(angle * 255_f32) as u8, 255, 0]),
+            );
+            img.save(format!("tmp/tmp_{i}.png")).unwrap();
+            //pos[1] += 1;
+            //magnitude += 1;
+            last_pos = pos;
+        }*/
+
+        let mut cmd =
+            Command::new("ffmpeg.exe")
+                .arg("-framerate")
+                .arg("120")
+                .arg("-i")
+                .arg("tmp/tmp_%01d.png")
+                .arg("out.mp4")
+                .output();
+        let out = cmd.unwrap().stdout;
+    }
+
+    #[test]
+    fn test_world2() {
+        let mut world = World::default();
+        let mut instant = Instant::now();
+        let rigid = world.register_rigidbody(Rigidbody::default());
+
+        while instant.elapsed().as_secs() < 5 {
+            world.update();
+        }
+
+        println!("{:?}", rigid.rigidbody);
     }
 }

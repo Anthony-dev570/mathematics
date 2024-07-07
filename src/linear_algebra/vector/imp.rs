@@ -1,5 +1,5 @@
 use std::fmt::Display;
-use std::ops::{Add, Sub};
+use std::ops::{Add, AddAssign, Sub};
 
 use crate::linear_algebra::vector::Vector;
 use crate::shared::traits::lerp::Lerp;
@@ -101,6 +101,12 @@ impl <const L: usize, N: Number> Add<N> for Vector<L, N> {
         }
 
         out
+    }
+}
+
+impl <const L: usize, N: Number> AddAssign<Vector<L, N>> for Vector<L, N> {
+    fn add_assign(&mut self, rhs: Vector<L, N>) {
+        *self = (*self + rhs);
     }
 }
 
