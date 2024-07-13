@@ -2,6 +2,14 @@ use std::ops::Neg;
 
 use crate::shared::traits::number::Number;
 
+pub fn summation<N: Number, S: Fn(usize) -> N>(
+    lower_bound: usize,
+    upper_bound: usize,
+    summation: S
+) -> N {
+    (lower_bound..upper_bound).into_iter().map(|s| summation(s)).sum()
+}
+
 pub fn quadratic_formula<N: Number>(a: N, b: N, c: N) -> [N; 2] where N: Neg<Output=N> {
     let neg_b = -b;
 

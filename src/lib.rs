@@ -3,9 +3,6 @@
 #![feature(generic_const_exprs)]
 #![feature(const_fn_floating_point_arithmetic)]
 
-use crate::geometry::curve::Curve;
-use crate::linear_algebra::vector::types::Vector2F32;
-
 pub mod shared;
 pub mod algebra;
 pub mod linear_algebra;
@@ -14,21 +11,15 @@ pub mod geometry;
 pub mod color;
 pub mod physics;
 
-pub fn do_test() {
-    Curve::Linear {
-        p0: Vector2F32::default(),
-        p1: Vector2F32::default(),
-    };
-}
-
 #[cfg(test)]
 mod tests {
-    use std::f32::consts::PI;
     use std::process::Command;
     use std::thread::spawn;
     use std::time::Instant;
+
     use image::{ColorType, GenericImage, Rgb, Rgba, RgbImage};
 
+    use crate::algebra::summation;
     use crate::color::Color;
     use crate::geometry::curve::Curve;
     use crate::geometry::shape::Shape;
@@ -36,10 +27,14 @@ mod tests {
     use crate::geometry::uv_sphere::UVSphere;
     use crate::linear_algebra::euler_angles::EulerAngles;
     use crate::linear_algebra::euler_angles::principle_euler_angles::PrincipleEulerAngles;
+    use crate::linear_algebra::matrix::Matrix;
     use crate::linear_algebra::matrix::types::Mat4F32;
     use crate::linear_algebra::vec3;
     use crate::linear_algebra::vector::types::{Vector2F32, Vector3, Vector3F32};
+    use crate::physics::collider::Collider;
+    use crate::physics::collider::sphere_collider::SphereCollider;
     use crate::physics::rigidbody::Rigidbody;
+    use crate::physics::rigidbody_handle::RigidbodyHandle;
     use crate::physics::world::World;
     use crate::shared::angle::Angle::Degrees;
     use crate::shared::traits::lerp::Lerp;
@@ -318,6 +313,50 @@ mod tests {
             world.update();
         }
 
-        println!("{:?}", rigid.rigidbody);
+        let mut sphere_collider = SphereCollider::new(5_f64);
+        sphere_collider.set_handle(RigidbodyHandle {
+            id: 0,
+            rigidbody: Default::default(),
+        });
+
+        let mut sphere_collider_2 = SphereCollider::new(5_f64);
+        sphere_collider_2.set_handle(RigidbodyHandle {
+            id: 0,
+            rigidbody: {
+                let r = Rigidbody::default();
+                r.set_position(vec3(7.0, 0.0, 0.0));
+                r
+            },
+        });
+
+        let col = sphere_collider.check_collision(&sphere_collider_2);
+        println!("{:?}", col);
+    }
+
+    #[test]
+    fn test_summation() {
+        println!("{}", summation(1, 10, |i| 2_f32.powf(i as f32)));
+    }
+
+    #[test]
+    fn test_ref() {
+        let mut r = Matrix::new([
+            [2_f32, 4_f32, 6_f32, 8_f32],
+            [0_f32, 1_f32, 0_f32, 0_f32],
+            [0_f32, 0_f32, 3_f32, 6_f32],
+        ]);
+
+    }
+
+    #[test]
+    fn test_ref2() {
+        let mut r = Matrix::new([
+            [1_f32, 2_f32, -3_f32],
+            [4_f32, -5_f32, 6_f32]
+        ]);
+
+        println!("{}", r);
+        r.mul_add_row(1, 0, 4_f32);
+        println!("{}", r);
     }
 }

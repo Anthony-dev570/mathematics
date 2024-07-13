@@ -37,6 +37,14 @@ impl Rigidbody {
             }
         }
     }
+
+    pub fn position(&self) -> Vector3F64 {
+        self.0.lock().unwrap().position
+    }
+
+    pub fn set_position(&self, position: Vector3F64) {
+        self.0.lock().unwrap().position = position;
+    }
 }
 
 impl Default for Rigidbody {
